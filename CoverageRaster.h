@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _RasterizeCoverage_H_
+#define _RasterizeCoverage_H_
 
 // Rasterize 2D triangles into 1 byte-per-pixel image.
 // @param indices Index buffer, 3 ints per triangle.
@@ -9,5 +10,8 @@ void RasterizeCoverage(
 					   const float* vertices,
 					   int width,
 					   int height,
+                       unsigned char step,
 					   unsigned char* image
 					   );
+
+#endif
