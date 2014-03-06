@@ -20,8 +20,9 @@ int main(int argc, const char * argv[])
 	const int kHeight = 1024;
 	const int kTriangles = 1000;
 	const int kVertices = kTriangles*3;
+    const unsigned char kStep = 8;
 	
-	srand(0);
+	srand((unsigned int)time(0));
 	
 	int* indices = new int[kTriangles*3];
 	float* vertices = new float[kVertices*2];
@@ -48,7 +49,7 @@ int main(int argc, const char * argv[])
 	
 	clock_t t0 = clock();
 	
-	RasterizeCoverage(kTriangles, indices, vertices, kWidth, kHeight, image);
+	RasterizeCoverage(kTriangles, indices, vertices, kWidth, kHeight, kStep, image);
 
 	clock_t t1 = clock();
 	float dt = float(t1-t0) / CLOCKS_PER_SEC;
