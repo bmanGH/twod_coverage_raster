@@ -11,7 +11,7 @@ struct Point2D
 	int x, y;
 };
 
-static int orient2d(const Point2D& a, const Point2D& b, const Point2D& c)
+static inline int orient2d(const Point2D& a, const Point2D& b, const Point2D& c)
 {
 	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
 }
@@ -28,10 +28,9 @@ static inline T max3(T a, T b, T c)
 	return std::max(a, std::max(b,c));
 }
 
-static void PutPixel (int x, int y, int width, int height, unsigned char* image)
+static inline void PutPixel (int x, int y, int width, int height, unsigned char step, unsigned char* image)
 {
-	//image[y * width + x] = 0xFF;
-	image[y * width + x] += 8;
+	image[y * width + x] += step;
 }
 
 
@@ -39,7 +38,7 @@ static void PutPixel (int x, int y, int width, int height, unsigned char* image)
 // and incorrect raster.
 static void RasterizeTri(
 						 const Point2D& v0, const Point2D& v1, const Point2D& v2,
-						 int width, int height, unsigned char* image
+						 int width, int height, unsigned char step, unsigned char* image
 						 )
 {
 	// Compute triangle bounding box
@@ -78,7 +77,7 @@ static void RasterizeTri(
 			// If p is on or inside all edges, render pixel.
 			if ((w0 | w1 | w2) >= 0)
 			{
-				PutPixel (p.x, p.y, width, height, image);
+				PutPixel (p.x, p.y, width, height, step, image);
 			}
 			
 			// One step to the right
@@ -96,13 +95,14 @@ static void RasterizeTri(
 
 
 void RasterizeCoverage(
-					   int triCount,
+                       int triCount,
 					   const int* indices,
 					   const float* vertices,
 					   int width,
 					   int height,
+                       unsigned char step,
 					   unsigned char* image
-)
+                       )
 {
 	for (int t = 0; t < triCount; ++t, indices += 3)
 	{
@@ -120,6 +120,6 @@ void RasterizeCoverage(
 			std::swap (v1, v2);
 		}
 		
-		RasterizeTri(v0, v1, v2, width, height, image);
+		RasterizeTri(v0, v1, v2, width, height, step, image);
 	}
 }
